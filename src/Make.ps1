@@ -51,6 +51,7 @@ if (!(IsDotnetPresent))
     if ($resp -eq "y")
     {
         Write-Output "Installing Please wait..."
+        Write-Output "This might take a while!"
         Write-Output "#########################"
         ./dotnet-install.ps1
     }
