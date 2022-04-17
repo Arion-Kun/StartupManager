@@ -186,4 +186,3 @@ public partial class Start : Form
         Task.Run(PerformCleanupCheck);
     }
 }
-// TODO: Decouple Everything into he MVP pattern
