@@ -10,9 +10,6 @@
     <Setting Name="EnableLogging" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>
     </Setting>
-    <Setting Name="Version" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">1.0.0</Value>
-    </Setting>
     <Setting Name="DonateLink" Type="System.String" Scope="Application">
       <Value Profile="(Default)">https://ko-fi.com/arion</Value>
     </Setting>

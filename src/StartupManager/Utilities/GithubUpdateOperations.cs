@@ -58,7 +58,7 @@ internal class GithubUpdateOperation
     internal async Task<bool> IsUpdateAvailable()
     {
         if (!await UpdateOperationAwaiter()) return false;
-        return await GetLatestVersionAsync() != Settings.Default.Version;
+        return await GetLatestVersionAsync() != CurrentVersionConstants.VERSION;
     }
 
     internal async Task<string> GetLatestDownloadURL()
@@ -83,6 +83,9 @@ internal class GithubUpdateOperation
     private async Task GetCurrentVersionByTag()
     {
         using var client = new HttpClient();
+        foreach (var productInfoHeaderValue in Microsoft_Edge_Chromium_Windows_UserAgent())
+            client.DefaultRequestHeaders.UserAgent.Add(productInfoHeaderValue); // We set our user agent
+        
         var response = await client.GetAsync(string.Format(TAG_ENDPOINT, CurrentVersionConstants.VERSION));
         if (response.StatusCode == HttpStatusCode.NotFound) return;
         
