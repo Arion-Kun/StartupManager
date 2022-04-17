@@ -1,6 +1,6 @@
 ### Main View
 <a href="https://github.com/Arion-Kun/StartupManager/raw/main/Previews/MainView.png">
-<img width=600 height=300 src="https://github.com/Arion-Kun/StartupManager/raw/main/Previews/MainView.png"/></a>
+<img src="https://github.com/Arion-Kun/StartupManager/raw/main/Previews/MainView.png"/></a>
 
 ### About View
 <a href="https://github.com/Arion-Kun/StartupManager/raw/main/Previews/AboutView.png">
