@@ -72,9 +72,11 @@ public partial class Start : Form
             cleanupMenuItem.Enabled = false;
             cleanupMenuItem.Image = Properties.Resources.recycle_empty;
         }
-        cleanupMenuItem.Enabled = true;
-        cleanupMenuItem.Image = Properties.Resources.recycle_full;
-
+        else
+        {
+            cleanupMenuItem.Enabled = true;
+            cleanupMenuItem.Image = Properties.Resources.recycle_full;
+        }
     }
 
     private readonly HashSet<Form> _subforms = new();
@@ -87,6 +89,7 @@ public partial class Start : Form
         {
             Show();
             WindowState = FormWindowState.Normal;
+            Task.Run(PerformCleanupCheck);
         }
     }
 
@@ -174,8 +177,11 @@ public partial class Start : Form
 
     private void Start_Resize(object sender, EventArgs e)
     {
-        if (WindowState == FormWindowState.Minimized) 
+        if (WindowState == FormWindowState.Minimized)
+        {
             Hide();
+            Task.Run(PerformCleanupCheck);
+        }
     }
 
     private void Cleanup_Click(object sender, EventArgs e)

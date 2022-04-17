@@ -53,11 +53,11 @@ public partial class CleanupForm : Form
             TestIrregularity(cleanupEntries, RegistryExtensions.Startup, RegistryExtensions.StartupApproved));
         
         await Task.WhenAll(taskList);
-        PerformSanityCheck(cleanupEntries);
+        PerformSanityCheck(ref cleanupEntries);
         return cleanupEntries;
     }
 
-    private static void PerformSanityCheck(List<CleanupEntry> entries)
+    private static void PerformSanityCheck(ref List<CleanupEntry> entries)
     {
         // This checks and removes any entries that are whitelisted
         foreach (var whitelistedAnomoly in WhitelistedAnomolies)
@@ -67,7 +67,7 @@ public partial class CleanupForm : Form
                     x.ToString().Equals(whitelistedAnomoly, StringComparison.OrdinalIgnoreCase));
         
         // Remove any duplicates
-        entries.RemoveAll(x => entries.Count(a => a.ToString() == x.ToString()) > 1);
+        entries = entries.Distinct(new CleanupEntryComparer()).ToList();
     }
 
     private static async Task TestIrregularity(List<CleanupEntry> entryBank, RegistryKey startupKey, RegistryKey startupApprovedKey)

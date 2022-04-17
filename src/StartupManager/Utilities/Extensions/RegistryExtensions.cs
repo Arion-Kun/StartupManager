@@ -11,8 +11,8 @@ using Microsoft.Win32;
 
 internal static class RegistryExtensions
 {
-    internal static RegistryKey StartupApproved { get; } = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run", true);
-    internal static RegistryKey Startup { get; } = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run", true);
+    internal static RegistryKey StartupApproved { get; } = Registry.CurrentUser.GetCreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run");
+    internal static RegistryKey Startup { get; } = Registry.CurrentUser.GetCreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
     
     // internal static RegistryKey StartupFolder => Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\StartupFolder", true);
 
@@ -76,13 +76,13 @@ internal static class RegistryExtensions
         //     StartupApproved.SetValue(key, valueArray);
         // } else
 
-        if (StartupApprovedLM.GetValueNames().Contains(key))
+        if (StartupApproved.GetValueNames().Contains(key))
             StartupApproved.SetValue(key, valueArray);
         else if (ApplicationExtensions.HasRelevantPermission())
         {
             if (StartupApprovedLM32.GetValueNames().Contains(key))
                 StartupApprovedLM32.SetValue(key, valueArray);
-            else StartupApproved.SetValue(key, valueArray);
+            else StartupApprovedLM.SetValue(key, valueArray);
         }
         
 

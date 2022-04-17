@@ -122,6 +122,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\Async.cs" />
     <Compile Include="Utilities\CleanupEntry.cs" />
+    <Compile Include="Utilities\CleanupEntryComparer.cs" />
     <Compile Include="Utilities\Converters\FileTimeConverter.cs" />
     <Compile Include="Utilities\DialogBoxes\ConfirmDialogBox.cs">
       <SubType>Form</SubType>

@@ -14,6 +14,6 @@ internal static class SettingsExtensions
         key.SetValue(name, defaultValue);
         return defaultValue;
     }
-    internal static RegistryKey GetCreateSubKey(this RegistryKey key, string name) => key.OpenSubKey(name, true) ?? key.CreateSubKey(name);
+    internal static RegistryKey GetCreateSubKey(this RegistryKey key, string name, bool writable = true) => key.OpenSubKey(name, writable) ?? key.CreateSubKey(name);
     internal static string ToJson(this object obj, Formatting format = Formatting.Indented) => JsonConvert.SerializeObject(obj, format);
 }

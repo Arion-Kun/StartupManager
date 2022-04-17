@@ -91,7 +91,7 @@ public partial class StartupForm : Form, IPage
                     {
                         RegistryExtensions.DisableValue(name);
                         var disableTime = RegistryExtensions.GetDisabledDate(name);
-                        row.Cells[nameof(DataKey_DisabledDate)].Value = disableTime.ToShortDateString();
+                        row.Cells[nameof(DataKey_DisabledDate)].Value = disableTime == DateTime.MinValue ? string.Empty : disableTime.ToShortDateString();
                     }
                 }
                 else
@@ -105,7 +105,7 @@ public partial class StartupForm : Form, IPage
                     {
                         RegistryExtensions.DisableValue(name);
                         var disableTime = RegistryExtensions.GetDisabledDate(name);
-                        row.Cells[nameof(DataKey_DisabledDate)].Value = disableTime.ToShortDateString();
+                        row.Cells[nameof(DataKey_DisabledDate)].Value = disableTime == DateTime.MinValue ? string.Empty : disableTime.ToShortDateString();
                     }
                 }
                 break;
@@ -299,10 +299,15 @@ public partial class StartupForm : Form, IPage
 
         var disabledDate = new DataGridViewTextBoxCell();
         disabledDate.ValueType = typeof(string);
-        disabledDate.Value = enabled.Value is true
-            ? string.Empty
-            : RegistryExtensions.GetDisabledDate(valueName).ToShortDateString();
-
+        if (enabled.Value is true)
+            disabledDate.Value = string.Empty;
+        else
+        {
+            var disabledDateValue = RegistryExtensions.GetDisabledDate(valueName);
+            disabledDate.Value = disabledDateValue == default ? string.Empty : disabledDateValue.ToShortDateString();
+            // This check here is to prevent the default value of DateTime from being shown if there is no StartupApproved value,
+            // this would usually occur when an app is freshly installed and the PC has not yet restarted to set an approved value.
+        }
 
         dgr.Cells.Add(image);
         dgr.Cells.Add(name);

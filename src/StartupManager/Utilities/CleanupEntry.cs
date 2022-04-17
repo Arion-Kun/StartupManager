@@ -7,7 +7,7 @@ using System.Linq;
 using Extensions;
 using Microsoft.Win32;
 
-internal class CleanupEntry
+public class CleanupEntry
 {
     private CleanupEntry() {}
 
