@@ -10,13 +10,21 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using Properties;
+using Timer = System.Timers.Timer;
 
 internal class GithubUpdateOperation
 {
-    public GithubUpdateOperation()
+    internal static GithubUpdateOperation Instance { get; } = new();
+    private GithubUpdateOperation()
     {
         _UpdateTask = Task.Run(CheckForUpdate);
         _CurrentVersionTask = Task.Run(GetCurrentVersionByTag);
+        
+        // 6 Hours may be a lot but there doesn't seem to be much need for drastic updates to this program so a long delay is fine.
+        // The UI feeds from the instance JObject so it's fine to update it from a background thread.
+        var updateTick = new Timer(TimeSpan.FromHours(6).TotalMilliseconds);
+        updateTick.Elapsed += (_, _) => Task.Run(CheckForUpdate);
+        updateTick.Start();
     }
 
     private async Task CheckForUpdate()
@@ -45,20 +53,24 @@ internal class GithubUpdateOperation
         else return false; // False = failed
         if (_CurrentVersion != null)
             await _CurrentVersionTask;
-        else return false; // False = failed
         return true; // True = success
     }
 
     internal async Task<string> GetLatestVersionAsync()
     {
         if (!await UpdateOperationAwaiter()) return null;
-        return _GitAPIResponse?["tag_name"].ToString();
+        return _GitAPIResponse?["tag_name"].ToString().Replace("v", string.Empty);
     }
 
     internal async Task<bool> IsUpdateAvailable()
     {
         if (!await UpdateOperationAwaiter()) return false;
-        return await GetLatestVersionAsync() != CurrentVersionConstants.VERSION;
+        var latestVersion = await GetLatestVersionAsync();
+        if (latestVersion == null) return false;
+        if (Version.TryParse(CurrentVersionConstants.VERSION, out var currentVersion))
+            return Version.TryParse(latestVersion, out var latestVersionParsed) &&
+                   latestVersionParsed > currentVersion;
+        return false;
     }
 
     internal async Task<string> GetLatestDownloadURL()
@@ -72,8 +84,9 @@ internal class GithubUpdateOperation
     {
         if (version == Versioning.Current)
         {
-            if (!await UpdateOperationAwaiter()) return null;
+            if (!await UpdateOperationAwaiter() || _CurrentVersion == null) return null;
             return DateTime.Parse(_CurrentVersion?["published_at"].ToString()).ToShortDateString();
+
         }
 
         if (!await UpdateOperationAwaiter()) return null;
@@ -100,7 +113,7 @@ internal class GithubUpdateOperation
         Current,
         Latest
     }
-    private static ICollection<ProductInfoHeaderValue> Microsoft_Edge_Chromium_Windows_UserAgent()
+    private static IEnumerable<ProductInfoHeaderValue> Microsoft_Edge_Chromium_Windows_UserAgent()
     {
         var x = new List<ProductInfoHeaderValue>
         {

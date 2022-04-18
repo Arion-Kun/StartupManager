@@ -13,7 +13,7 @@ using Utilities;
 
 public partial class AboutForm : Form
 {
-    private readonly GithubUpdateOperation _UpdateOperation = new();
+    private GithubUpdateOperation _UpdateOperation => GithubUpdateOperation.Instance;
 
     public AboutForm()
     {
