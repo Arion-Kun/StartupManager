@@ -86,7 +86,6 @@ internal class GithubUpdateOperation
         {
             if (!await UpdateOperationAwaiter() || _CurrentVersion == null) return null;
             return DateTime.Parse(_CurrentVersion?["published_at"].ToString()).ToShortDateString();
-
         }
 
         if (!await UpdateOperationAwaiter()) return null;
