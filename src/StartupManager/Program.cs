@@ -1,11 +1,12 @@
 ﻿namespace StartupManager;
 
 using System;
-using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Extensions;
+using Utilities;
 
-static class Program
+internal static class Program
 {
     /// <summary>
     /// The main entry point for the application.
@@ -22,6 +23,8 @@ static class Program
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
         _ = new Start();
+        // This initializes the instance, otherwise it would only be initialized once used.
+        _ = Task.Run(() => GithubUpdateOperation.Instance);
         Application.Run();
         
     }
