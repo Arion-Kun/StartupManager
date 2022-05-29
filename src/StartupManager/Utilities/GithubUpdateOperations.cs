@@ -7,14 +7,13 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using Properties;
 using Timer = System.Timers.Timer;
 
 internal class GithubUpdateOperation
 {
-    internal static GithubUpdateOperation Instance { get; } = new();
+    internal static readonly GithubUpdateOperation Instance = new();
     private GithubUpdateOperation()
     {
         _UpdateTask = Task.Run(CheckForUpdate);
@@ -86,7 +85,6 @@ internal class GithubUpdateOperation
         {
             if (!await UpdateOperationAwaiter() || _CurrentVersion == null) return null;
             return DateTime.Parse(_CurrentVersion?["published_at"].ToString()).ToShortDateString();
-
         }
 
         if (!await UpdateOperationAwaiter()) return null;
