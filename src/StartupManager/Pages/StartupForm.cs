@@ -15,7 +15,7 @@ using Microsoft.Win32;
 using Utilities;
 using Control = Control;
 
-public partial class StartupForm : Form, IPage
+public partial class StartupForm : Form
 {
     public StartupForm()
     {
@@ -239,7 +239,7 @@ public partial class StartupForm : Form, IPage
 
         await Task.WhenAll(tasks);
 
-        var retVal = row.ToArray();
+        var retVal = row.Where(x => x != null).ToArray();
         await TaskAwaiter.Yield;
         StartupKeys.Rows.AddRange(retVal);
         Theme.DarkMode(this);
@@ -318,13 +318,7 @@ public partial class StartupForm : Form, IPage
         return dgr;
     }
 
-    private async Task<DataGridViewRow> IterateRegistryValueAsync(RegistryKey key, string valueName) => 
-        await Task.Run(()=> CreateIterationRow(key, valueName));
+    private async Task<DataGridViewRow> IterateRegistryValueAsync(RegistryKey key, string valueName) =>
+        await Task.Run(() => CreateIterationRow(key, valueName));
 
-
-    public void OnPageShow()
-    {
-
-    }
-    
 }

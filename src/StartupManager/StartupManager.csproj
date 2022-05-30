@@ -101,7 +101,6 @@
     <Compile Include="Pages\CleanupForm.Designer.cs">
       <DependentUpon>CleanupForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Pages\IPage.cs" />
     <Compile Include="Pages\StartupForm.cs">
       <SubType>Form</SubType>
     </Compile>

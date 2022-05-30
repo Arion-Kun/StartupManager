@@ -12,53 +12,51 @@ using Extensions;
 using Pages;
 using Resources;
 using Utilities;
+using Timer = System.Timers.Timer;
 
 public partial class Start : Form
 {
     public static Start Instance { get; private set; }
     public Start()
     {
-        Instance = this;
-        InitializeComponent();
-        SetUACBoxState(Properties.Settings.Default.PromptUAC);
-        AppDomain.CurrentDomain.ProcessExit += delegate { if (_TrayIcon != null) _TrayIcon.Visible = false; };
-        //If the user closes the application from the tray or the form, the application will close
-        FormClosing += (_, _) => {
-            //Graceful Tray Icon Exit
-            _TrayIcon.Visible = false;
-            Environment.Exit(0);
-        };
-        var 
-        _startupForm = new StartupForm();
-        _startupForm.TopLevel = false;
-        _startupForm.VisibleChanged += (instance, _) =>
+        try
         {
-            var instance_ = instance as StartupForm;
-            if (instance_!.Visible) 
-                instance_.OnPageShow();
-        };
-        formContainer.Controls.Add(_startupForm);
-        _subforms.Add(_startupForm);
+            Instance = this;
+            InitializeComponent();
+            SetUACBoxState(Properties.Settings.Default.PromptUAC);
+            AppDomain.CurrentDomain.ProcessExit += delegate { if (_TrayIcon != null) _TrayIcon.Visible = false; };
+            //If the user closes the application from the tray or the form, the application will close
+            FormClosing += (_, _) => {
+                //Graceful Tray Icon Exit
+                _TrayIcon.Visible = false;
+                Environment.Exit(0);
+            };
+            var _startupForm = new StartupForm();
+            _startupForm.TopLevel = false;
+            formContainer.Controls.Add(_startupForm);
+            _subforms.Add(_startupForm);
 
-        Theme.Initialize(this);
-        _startupForm.Show();
-        Resize += delegate
-        {
-            foreach (var subform in _subforms)
+            Theme.Initialize(this);
+            _startupForm.Show();
+            Resize += delegate
             {
-                subform.Size = Size;
-            }
-        };
+                foreach (var subform in _subforms)
+                    subform.Size = Size;
+            };
 
-        if (!Environment.GetCommandLineArgs().Contains("/Background"))
-            Visible = true;
         
-        var x = new System.Timers.Timer(TimeSpan.FromMinutes(60).TotalMilliseconds);
-        x.Elapsed += (_, _) => Task.Run(PerformCleanupCheck);
-        Task.Run(PerformCleanupCheck);
-        TCM_btn_RunOnStartup.Image = Settings.StartWithWindows
-            ? Properties.Resources.icons8_checked_checkbox
-            : Properties.Resources.icons8_unchecked_checkbox;
+        
+            var x = new Timer(TimeSpan.FromMinutes(60).TotalMilliseconds);
+            x.Elapsed += (_, _) => Task.Run(PerformCleanupCheck);
+            Task.Run(PerformCleanupCheck);
+            TCM_btn_RunOnStartup.Image = Settings.StartWithWindows
+                ? Properties.Resources.icons8_checked_checkbox
+                : Properties.Resources.icons8_unchecked_checkbox;
+        }
+        finally
+        {
+            Visible = !Environment.GetCommandLineArgs().Contains("/Background");
+        }
     }
 
     private async Task PerformCleanupCheck()
