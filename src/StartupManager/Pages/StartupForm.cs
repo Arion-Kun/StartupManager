@@ -146,7 +146,11 @@ public partial class StartupForm : Form
                     Arguments = "/C " + path,
                     CreateNoWindow = true,
                 };
-                Process.Start(startInfo);
+                try
+                {
+                    Process.Start(startInfo);
+                }
+                catch {}
                 break;
             case 3:
                 OnCheckboxClick(sender as DataGridViewCheckBoxCell, e);

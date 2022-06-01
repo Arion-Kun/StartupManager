@@ -31,7 +31,7 @@ internal static class ApplicationExtensions
             WorkingDirectory = Environment.CurrentDirectory,
             FileName = Application.ExecutablePath,
             Verb = "runas",
-            Arguments = "/Show"
+            Arguments = Environment.CommandLine.Substring(1)
         };
         try
         {
