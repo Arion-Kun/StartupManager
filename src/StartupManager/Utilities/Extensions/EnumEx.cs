@@ -1,9 +1,9 @@
-﻿namespace StartupManager.Extensions;
+﻿namespace Dawn.Apps.StartupManager.Extensions;
 
 using System;
 using System.Collections.Generic;
 
-internal static class EnumExtensions
+internal static class EnumEx
 {
     internal static IReadOnlyCollection<string> GetNames<T>() where T: Enum => Enum.GetNames(typeof(T));
     

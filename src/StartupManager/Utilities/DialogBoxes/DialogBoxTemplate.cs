@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace StartupManager.DialogBoxes;
+namespace Dawn.Apps.StartupManager.DialogBoxes;
 
 public abstract class DialogBoxTemplate<T> : Form
 {

@@ -1,4 +1,4 @@
-﻿namespace StartupManager.Extensions;
+﻿namespace Dawn.Apps.StartupManager.Extensions;
 
 using System;
 using System.Drawing;
@@ -9,7 +9,7 @@ using Converters;
 using Helpers;
 using Microsoft.Win32;
 
-internal static class RegistryExtensions
+internal static class RegistryEx
 {
     internal static RegistryKey StartupApproved { get; } = Registry.CurrentUser.GetCreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run");
     internal static RegistryKey Startup { get; } = Registry.CurrentUser.GetCreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
@@ -78,7 +78,7 @@ internal static class RegistryExtensions
 
         if (StartupApproved.GetValueNames().Contains(key))
             StartupApproved.SetValue(key, valueArray);
-        else if (ApplicationExtensions.HasRelevantPermission())
+        else if (ApplicationEx.HasRelevantPermission())
         {
             if (StartupApprovedLM32.GetValueNames().Contains(key))
                 StartupApprovedLM32.SetValue(key, valueArray);
@@ -92,7 +92,7 @@ internal static class RegistryExtensions
     internal static DateTime GetDisabledDate(string key)
     {
         var valueArray = StartupApproved.GetValue(key) as byte[];
-        if (valueArray == null && ApplicationExtensions.HasRelevantPermission())
+        if (valueArray == null && ApplicationEx.HasRelevantPermission())
         {
             valueArray = StartupApprovedLM.GetValue(key) as byte[]
                          ?? StartupApprovedLM32.GetValue(key) as byte[];
@@ -106,7 +106,7 @@ internal static class RegistryExtensions
         if (StartupApproved.GetValueNames().Contains(key))
             return ((byte[])StartupApproved.GetValue(key))[0] == 3;
 
-        if (!ApplicationExtensions.HasRelevantPermission()) return false;
+        if (!ApplicationEx.HasRelevantPermission()) return false;
         if (StartupApprovedLM.GetValueNames().Contains(key))
             return ((byte[])StartupApprovedLM.GetValue(key))[0] == 3;
         
@@ -121,7 +121,7 @@ internal static class RegistryExtensions
         
         if (StartupApproved.GetValueNames().Contains(key))
             value = StartupApproved.GetValue(key);
-        else if (ApplicationExtensions.HasRelevantPermission())
+        else if (ApplicationEx.HasRelevantPermission())
         {
             if (StartupApprovedLM.GetValueNames().Contains(key))
                 value = StartupApprovedLM.GetValue(key);
@@ -140,7 +140,7 @@ internal static class RegistryExtensions
         if (StartupApproved.GetValueNames().Contains(valueName))
             StartupApproved.DeleteValue(valueName);
 
-        if (!ApplicationExtensions.HasRelevantPermission()) return;
+        if (!ApplicationEx.HasRelevantPermission()) return;
         if (StartupLM.GetValueNames().Contains(valueName))
             StartupLM.DeleteValue(valueName);
         if (StartupApprovedLM.GetValueNames().Contains(valueName))

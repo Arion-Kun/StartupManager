@@ -1,4 +1,4 @@
-﻿namespace StartupManager;
+﻿namespace Dawn.Apps.StartupManager;
 
 using System;
 using System.Threading.Tasks;
@@ -17,8 +17,8 @@ internal static class Program
 
         if (Properties.Settings.Default.EnableLogging)
             Logging.Enable();
-        if (Properties.Settings.Default.PromptUAC && !ApplicationExtensions.IsElevated)
-            if (!ApplicationExtensions.TryRunAsAdministrator()) return;
+        if (Properties.Settings.Default.PromptUAC && !ApplicationEx.IsElevated)
+            if (!ApplicationEx.TryRunAsAdministrator()) return;
         
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);

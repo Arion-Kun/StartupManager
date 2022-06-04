@@ -1,4 +1,4 @@
-﻿namespace StartupManager.Helpers;
+﻿namespace Dawn.Apps.StartupManager.Helpers;
 
 using System;
 using Microsoft.Win32;
