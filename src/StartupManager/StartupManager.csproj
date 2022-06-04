@@ -23,25 +23,27 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+    <DebugType>embedded</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32bit>true</Prefer32bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>none</DebugType>
+    <DebugType>embedded</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32bit>true</Prefer32bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Tpm, Version=10.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\Microsoft.Tpm\v4.0_10.0.0.0__31bf3856ad364e35\Microsoft.Tpm.dll</HintPath>
+    <Reference Include="Microsoft.Win32.TaskScheduler, Version=2.10.1.0, Culture=neutral, PublicKeyToken=e25603a88b3aa7da, processorArchitecture=MSIL">
+      <HintPath>..\packages\TaskScheduler.2.10.1\lib\net452\Microsoft.Win32.TaskScheduler.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
@@ -57,6 +59,7 @@
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
       <Private>True</Private>
@@ -119,7 +122,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\Async.cs" />
+    <Compile Include="Utilities\AsyncUtils.cs" />
     <Compile Include="Utilities\CleanupEntry.cs" />
     <Compile Include="Utilities\CleanupEntryComparer.cs" />
     <Compile Include="Utilities\Converters\FileTimeConverter.cs" />
@@ -132,11 +135,12 @@
     <Compile Include="Utilities\DialogBoxes\DialogBoxTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Utilities\Extensions\ApplicationExtensions.cs" />
-    <Compile Include="Utilities\Extensions\EnumExtensions.cs" />
+    <Compile Include="Utilities\Extensions\ApplicationEx.cs" />
+    <Compile Include="Utilities\Extensions\EnumEx.cs" />
     <Compile Include="Utilities\Extensions\Logging.cs" />
-    <Compile Include="Utilities\Extensions\RegistryExtensions.cs" />
-    <Compile Include="Utilities\Extensions\SettingsExtensions.cs" />
+    <Compile Include="Utilities\Extensions\RegistryEx.cs" />
+    <Compile Include="Utilities\Extensions\SettingsEx.cs" />
+    <Compile Include="Utilities\Extensions\TaskSchedulerEx.cs" />
     <Compile Include="Utilities\GithubUpdateOperations.cs" />
     <Compile Include="Utilities\Helpers\RegistryHelpers.cs" />
     <Compile Include="Utilities\Native\NativeMethods.cs" />
