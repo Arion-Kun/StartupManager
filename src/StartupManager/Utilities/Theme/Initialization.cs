@@ -1,4 +1,4 @@
-﻿namespace StartupManager;
+﻿namespace Dawn.Apps.StartupManager;
 
 using System;
 using System.Collections.Generic;

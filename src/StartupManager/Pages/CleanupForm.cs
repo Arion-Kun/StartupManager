@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace StartupManager.Pages;
+namespace Dawn.Apps.StartupManager.Pages;
 
 using System;
 using System.Collections.Generic;
@@ -42,15 +42,15 @@ public partial class CleanupForm : Form
     {
         var taskList = new List<Task>();
         var cleanupEntries = new List<CleanupEntry>();
-        if (ApplicationExtensions.HasRelevantPermission())
+        if (ApplicationEx.HasRelevantPermission())
         {
             taskList.Add(
-                TestIrregularity(cleanupEntries, RegistryExtensions.StartupLM, RegistryExtensions.StartupApprovedLM));
+                TestIrregularity(cleanupEntries, RegistryEx.StartupLM, RegistryEx.StartupApprovedLM));
             taskList.Add(
-                TestIrregularity(cleanupEntries, RegistryExtensions.StartupLM64, RegistryExtensions.StartupApprovedLM32));
+                TestIrregularity(cleanupEntries, RegistryEx.StartupLM64, RegistryEx.StartupApprovedLM32));
         }
         taskList.Add(
-            TestIrregularity(cleanupEntries, RegistryExtensions.Startup, RegistryExtensions.StartupApproved));
+            TestIrregularity(cleanupEntries, RegistryEx.Startup, RegistryEx.StartupApproved));
         
         await Task.WhenAll(taskList);
         PerformSanityCheck(ref cleanupEntries);
@@ -103,12 +103,12 @@ public partial class CleanupForm : Form
 
     private static bool StartupContainsAnyExclusionary(string keyName)
     {
-        var keyList = new List<RegistryKey> { RegistryExtensions.Startup };
+        var keyList = new List<RegistryKey> { RegistryEx.Startup };
         
-        if (!ApplicationExtensions.IsElevated) return keyList.Any(key => key.GetValueNames().Contains(keyName));
+        if (!ApplicationEx.IsElevated) return keyList.Any(key => key.GetValueNames().Contains(keyName));
         
-        keyList.Add(RegistryExtensions.StartupLM);
-        keyList.Add(RegistryExtensions.StartupLM64);
+        keyList.Add(RegistryEx.StartupLM);
+        keyList.Add(RegistryEx.StartupLM64);
 
         return keyList.Any(key => key.GetValueNames().Contains(keyName));
     }
@@ -125,7 +125,7 @@ public partial class CleanupForm : Form
                 continue;
             }
             
-            var dirPath = Path.GetDirectoryName(RegistryExtensions.RemoveArguments(startupKey.GetValue(startupName).ToString()));
+            var dirPath = Path.GetDirectoryName(RegistryEx.RemoveArguments(startupKey.GetValue(startupName).ToString()));
             if (!Directory.Exists(dirPath) && CleanupEntry.Create(startupKey, startupName, out var startupApprovedEntry1))
                 entries.Add(startupApprovedEntry1);
             

@@ -1,4 +1,4 @@
-﻿namespace StartupManager.Pages;
+﻿namespace Dawn.Apps.StartupManager.Pages;
 
 using System.ComponentModel;
 

@@ -1,4 +1,4 @@
-﻿namespace StartupManager.DialogBoxes;
+﻿namespace Dawn.Apps.StartupManager.DialogBoxes;
 
 using System.ComponentModel;
 
@@ -112,7 +112,7 @@ partial class ConfirmDialogBox
         // button1
         // 
         this.button1.BackColor = System.Drawing.Color.Transparent;
-        this.button1.BackgroundImage = global::StartupManager.Properties.Resources.icons8_cancel;
+        this.button1.BackgroundImage = global::Dawn.Apps.StartupManager.Properties.Resources.icons8_cancel;
         this.button1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
         this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
         this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;

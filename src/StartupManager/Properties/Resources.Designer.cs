@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace StartupManager.Properties {
+namespace Dawn.Apps.StartupManager.Properties {
     using System;
     
     

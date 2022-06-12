@@ -1,4 +1,4 @@
-﻿namespace StartupManager.Converters;
+﻿namespace Dawn.Apps.StartupManager.Converters;
 
 using System;
 

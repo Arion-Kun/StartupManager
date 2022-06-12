@@ -1,4 +1,4 @@
-﻿namespace StartupManager.Utilities;
+﻿namespace Dawn.Apps.StartupManager.Utilities;
 
 using System;
 using System.Runtime.CompilerServices;

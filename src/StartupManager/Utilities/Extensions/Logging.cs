@@ -1,4 +1,4 @@
-﻿namespace StartupManager.Extensions;
+﻿namespace Dawn.Apps.StartupManager.Extensions;
 
 using System;
 using System.Diagnostics;

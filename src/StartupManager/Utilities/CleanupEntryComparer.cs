@@ -1,6 +1,5 @@
-﻿namespace StartupManager.Utilities;
+﻿namespace Dawn.Apps.StartupManager.Utilities;
 
-using System;
 using System.Collections.Generic;
 
 public class CleanupEntryComparer : IEqualityComparer<CleanupEntry>

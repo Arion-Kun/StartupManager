@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace StartupManager.Pages;
+namespace Dawn.Apps.StartupManager.Pages;
 
 using System;
 using System.Diagnostics;
@@ -29,10 +29,10 @@ public partial class AboutForm : Form
          
         SyncUpdateResponse();
     }
-
+    // CRLF standard
     private const string ADDITIONAL_DESCRIPTION =
         "\r\n\r\nThe Startup Folder contents are not included in the list as they're for the user themselves.";
-    // CRLF standard ^
+    
     private async void SyncUpdateResponse()
     {
         var updateNeeded = await _UpdateOperation.IsUpdateAvailable();

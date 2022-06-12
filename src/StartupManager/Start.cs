@@ -1,8 +1,9 @@
-﻿namespace StartupManager;
+﻿namespace Dawn.Apps.StartupManager;
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
@@ -14,7 +15,7 @@ using Resources;
 using Utilities;
 using Timer = System.Timers.Timer;
 
-public partial class Start : Form
+public sealed partial class Start : Form
 {
     public static Start Instance { get; private set; }
     public Start()
@@ -52,6 +53,9 @@ public partial class Start : Form
             TCM_btn_RunOnStartup.Image = Settings.StartWithWindows
                 ? Properties.Resources.icons8_checked_checkbox
                 : Properties.Resources.icons8_unchecked_checkbox;
+
+            if (ApplicationEx.IsElevated)
+                Text = "Startup Manager - Administrator";
         }
         finally
         {
@@ -137,8 +141,8 @@ public partial class Start : Form
             UACBox.Text = Strings.INCLUDE_LOCALMACHINE;
             Properties.Settings.Default.PromptUAC = true;
             Properties.Settings.Default.Save();
-            if (!ApplicationExtensions.HasRelevantPermission())
-                ApplicationExtensions.TryRunAsAdministrator();
+            if (!ApplicationEx.HasRelevantPermission())
+                ApplicationEx.TryRunAsAdministrator();
             else ApplicationRefreshCallbacks();
         }
     }
@@ -153,18 +157,24 @@ public partial class Start : Form
             // TCM_btn_RunOnStartup.Checked = false;
             SetStartupCheck(false);
             Settings.StartWithWindows = false;
-            ApplicationRefreshCallbacks();
         }
         else
         {
             // TCM_btn_RunOnStartup.Checked = true;
             SetStartupCheck(true);
             Settings.StartWithWindows = true;
-            ApplicationRefreshCallbacks();
         }
     }
 
-    internal bool StartupState => TCM_btn_RunOnStartup.Image == Properties.Resources.icons8_checked_checkbox;
+    private static bool _StartupState;
+    private bool StartupState
+    {
+        get
+        {
+            _StartupState = !_StartupState;
+            return _StartupState;
+        }
+    }
     internal void SetStartupCheck(bool @checked) => TCM_btn_RunOnStartup.Image = @checked ? Properties.Resources.icons8_checked_checkbox : Properties.Resources.icons8_unchecked_checkbox;
 
     private void aboutToolStripMenuItem_Click(object sender, EventArgs e)

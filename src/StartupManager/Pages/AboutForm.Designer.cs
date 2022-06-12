@@ -1,4 +1,4 @@
-﻿namespace StartupManager.Pages;
+﻿namespace Dawn.Apps.StartupManager.Pages;
 
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -60,7 +60,7 @@ partial class AboutForm
         // __CancelButton
         // 
         this.@__CancelButton.BackColor = System.Drawing.Color.Transparent;
-        this.@__CancelButton.BackgroundImage = global::StartupManager.Properties.Resources.icons8_cancel;
+        this.@__CancelButton.BackgroundImage = global::Dawn.Apps.StartupManager.Properties.Resources.icons8_cancel;
         resources.ApplyResources(this.@__CancelButton, "__CancelButton");
         this.@__CancelButton.Cursor = System.Windows.Forms.Cursors.Hand;
         this.@__CancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;

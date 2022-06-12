@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace StartupManager.Pages;
+namespace Dawn.Apps.StartupManager.Pages;
 
 using System;
 using System.Collections.Generic;
@@ -75,22 +75,22 @@ public partial class StartupForm : Form
                 // var name = row.Cells[nameof(DataKey_Name)].Value.ToString();
                 var name = row.Cells[nameof(DataKey_Name)].Value.ToString();
                 var enabledState = (bool)row.Cells[nameof(DataKey_Enabled)].EditedFormattedValue;
-                var startupApproved = RegistryExtensions.StartupApproved;
+                var startupApproved = RegistryEx.StartupApproved;
                 var isPresentInStartupApproved = startupApproved.GetValueNames().Contains(name);
                 if (isPresentInStartupApproved)
                 {
-                    var isDisabled = RegistryExtensions.IsDisabled(name);
+                    var isDisabled = RegistryEx.IsDisabled(name);
                     if (!(enabledState ^ !isDisabled))
                         return; // If there's no change, do nothing.
                     if (enabledState)
                     {
-                        startupApproved.SetValue(name, RegistryExtensions.StartupApprovedEnabled0);
+                        startupApproved.SetValue(name, RegistryEx.StartupApprovedEnabled0);
                         row.Cells[nameof(DataKey_DisabledDate)].Value = "";
                     }
                     else
                     {
-                        RegistryExtensions.DisableValue(name);
-                        var disableTime = RegistryExtensions.GetDisabledDate(name);
+                        RegistryEx.DisableValue(name);
+                        var disableTime = RegistryEx.GetDisabledDate(name);
                         row.Cells[nameof(DataKey_DisabledDate)].Value = disableTime == DateTime.MinValue ? string.Empty : disableTime.ToShortDateString();
                     }
                 }
@@ -98,13 +98,13 @@ public partial class StartupForm : Form
                 {
                     if (enabledState)
                     {
-                        startupApproved.SetValue(name, RegistryExtensions.StartupApprovedEnabled0);
+                        startupApproved.SetValue(name, RegistryEx.StartupApprovedEnabled0);
                         row.Cells[nameof(DataKey_DisabledDate)].Value = "";
                     }
                     else
                     {
-                        RegistryExtensions.DisableValue(name);
-                        var disableTime = RegistryExtensions.GetDisabledDate(name);
+                        RegistryEx.DisableValue(name);
+                        var disableTime = RegistryEx.GetDisabledDate(name);
                         row.Cells[nameof(DataKey_DisabledDate)].Value = disableTime == DateTime.MinValue ? string.Empty : disableTime.ToShortDateString();
                     }
                 }
@@ -129,13 +129,13 @@ public partial class StartupForm : Form
             case 0: // Icon
                 var path2 = StartupKeys.Rows[e.RowIndex].Cells[nameof(DataKey_Path)].Value.ToString();
                 // Open to the directory of the path
-                var dirPath = Path.GetDirectoryName(RegistryExtensions.RemoveArguments(path2));
+                var dirPath = Path.GetDirectoryName(RegistryEx.RemoveArguments(path2));
                 if (Directory.Exists(dirPath))
                     Process.Start(dirPath);
                 break;
             case 2: // Path
                 var path = StartupKeys.Rows[e.RowIndex].Cells[nameof(DataKey_Path)].Value.ToString();
-                var pathDirectory = Path.GetDirectoryName(RegistryExtensions.RemoveArguments(path));
+                var pathDirectory = Path.GetDirectoryName(RegistryEx.RemoveArguments(path));
                 
                 if (string.IsNullOrWhiteSpace(pathDirectory)) return;
                 var startInfo = new ProcessStartInfo
@@ -171,7 +171,7 @@ public partial class StartupForm : Form
         {
             Start.Instance.SetStartupCheck(false);
         }
-        RegistryExtensions.DeleteValue(value);
+        RegistryEx.DeleteValue(value);
         StartupKeys.Rows.RemoveAt(e.RowIndex);
     }
     
@@ -201,14 +201,14 @@ public partial class StartupForm : Form
         RefreshDisposables();
         
 
-        foreach (var valueName in RegistryExtensions.Startup.GetValueNames())
-            IterateRegistryValue(RegistryExtensions.Startup, valueName);
-        if (!ApplicationExtensions.HasRelevantPermission()) return;
+        foreach (var valueName in RegistryEx.Startup.GetValueNames())
+            IterateRegistryValue(RegistryEx.Startup, valueName);
+        if (!ApplicationEx.HasRelevantPermission()) return;
         {
-            foreach (var valueName in RegistryExtensions.StartupLM64.GetValueNames())
-                    IterateRegistryValue(RegistryExtensions.StartupLM64, valueName);
-            foreach (var valueName in RegistryExtensions.StartupLM.GetValueNames())
-                IterateRegistryValue(RegistryExtensions.StartupLM, valueName);
+            foreach (var valueName in RegistryEx.StartupLM64.GetValueNames())
+                    IterateRegistryValue(RegistryEx.StartupLM64, valueName);
+            foreach (var valueName in RegistryEx.StartupLM.GetValueNames())
+                IterateRegistryValue(RegistryEx.StartupLM, valueName);
         }
     }
 
@@ -224,21 +224,21 @@ public partial class StartupForm : Form
 
         var row = new List<DataGridViewRow>();
 
-        var tasks = RegistryExtensions.Startup.GetValueNames().Select(valueName 
+        var tasks = RegistryEx.Startup.GetValueNames().Select(valueName 
             => Task.Run(async () 
                 => row.Add(
-                    await IterateRegistryValueAsync(RegistryExtensions.Startup, valueName)))).ToList();
+                    await IterateRegistryValueAsync(RegistryEx.Startup, valueName)))).ToList();
 
-        if (ApplicationExtensions.HasRelevantPermission())
+        if (ApplicationEx.HasRelevantPermission())
         {
-            tasks.AddRange(RegistryExtensions.StartupLM64.GetValueNames().Select(valueName 
+            tasks.AddRange(RegistryEx.StartupLM64.GetValueNames().Select(valueName 
                 => Task.Run(async () 
                     => row.Add(
-                        await IterateRegistryValueAsync(RegistryExtensions.StartupLM64, valueName)))));
-            tasks.AddRange(RegistryExtensions.StartupLM.GetValueNames().Select(valueName 
+                        await IterateRegistryValueAsync(RegistryEx.StartupLM64, valueName)))));
+            tasks.AddRange(RegistryEx.StartupLM.GetValueNames().Select(valueName 
                 => Task.Run(async () 
                     => row.Add(
-                        await IterateRegistryValueAsync(RegistryExtensions.StartupLM, valueName)))));
+                        await IterateRegistryValueAsync(RegistryEx.StartupLM, valueName)))));
         }
 
         await Task.WhenAll(tasks);
@@ -266,7 +266,7 @@ public partial class StartupForm : Form
         path.ValueType = typeof(string);
         path.Value = key.GetValue(valueName);
         var enabled = new DataGridViewCheckBoxCell();
-        if (RegistryExtensions.TryGetStartupApproved(valueName, out var approvedValue))
+        if (RegistryEx.TryGetStartupApproved(valueName, out var approvedValue))
         {
             var val = approvedValue as byte[];
             var enabledValue = val![0];
@@ -287,7 +287,7 @@ public partial class StartupForm : Form
         delete.Value = "Delete";
 
         var image = new DataGridViewImageCell();
-        var iconValue = RegistryExtensions.GetIcon(key.GetValue(valueName));
+        var iconValue = RegistryEx.GetIcon(key.GetValue(valueName));
         if (iconValue != null)
         {
             var imageVal = new Bitmap(iconValue.ToBitmap(), 20, 20);
@@ -307,7 +307,7 @@ public partial class StartupForm : Form
             disabledDate.Value = string.Empty;
         else
         {
-            var disabledDateValue = RegistryExtensions.GetDisabledDate(valueName);
+            var disabledDateValue = RegistryEx.GetDisabledDate(valueName);
             disabledDate.Value = disabledDateValue == default ? string.Empty : disabledDateValue.ToShortDateString();
             // This check here is to prevent the default value of DateTime from being shown if there is no StartupApproved value,
             // this would usually occur when an app is freshly installed and the PC has not yet restarted to set an approved value.

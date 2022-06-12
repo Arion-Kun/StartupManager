@@ -1,4 +1,4 @@
-﻿namespace StartupManager.Resources;
+﻿namespace Dawn.Apps.StartupManager.Resources;
 
 internal static class Strings
 {

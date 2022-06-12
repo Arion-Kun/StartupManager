@@ -1,13 +1,13 @@
-﻿namespace StartupManager.Extensions;
+﻿namespace Dawn.Apps.StartupManager.Extensions;
 
 using System;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Windows.Forms;
 
-internal static class ApplicationExtensions
+public static class ApplicationEx
 {
-    internal static bool IsElevated
+    public static bool IsElevated
     {
         get
         {

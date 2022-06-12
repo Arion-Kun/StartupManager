@@ -1,4 +1,4 @@
-﻿namespace StartupManager.Native;
+﻿namespace Dawn.Apps.StartupManager.Native;
 
 using System;
 using System.Runtime.InteropServices;

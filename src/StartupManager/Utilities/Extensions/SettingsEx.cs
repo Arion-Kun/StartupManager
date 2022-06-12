@@ -1,10 +1,10 @@
-﻿namespace StartupManager.Extensions;
+﻿namespace Dawn.Apps.StartupManager.Extensions;
 
 using System;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 
-internal static class SettingsExtensions
+internal static class SettingsEx
 {
     internal static T GetValue<T>(this RegistryKey key, string name, T defaultValue)
     {

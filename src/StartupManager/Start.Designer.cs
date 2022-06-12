@@ -1,4 +1,4 @@
-﻿namespace StartupManager
+﻿namespace Dawn.Apps.StartupManager
 {
     partial class Start
     {
@@ -51,7 +51,7 @@
             // 
             this._TrayIcon.ContextMenuStrip = this.TrayContextMenu;
             this._TrayIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("_TrayIcon.Icon")));
-            this._TrayIcon.Text = "Startup Selector";
+            this._TrayIcon.Text = "Startup Manager";
             this._TrayIcon.Visible = true;
             this._TrayIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.TrayIcon_MouseDoubleClick);
             // 
@@ -117,7 +117,7 @@
             // Cleanup
             // 
             this.Cleanup.Enabled = false;
-            this.Cleanup.Image = global::StartupManager.Properties.Resources.recycle_empty;
+            this.Cleanup.Image = global::Dawn.Apps.StartupManager.Properties.Resources.recycle_empty;
             this.Cleanup.Name = "Cleanup";
             this.Cleanup.Size = new System.Drawing.Size(79, 20);
             this.Cleanup.Text = "Cleanup";
