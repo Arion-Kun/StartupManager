@@ -16,7 +16,8 @@ internal static class PathEx
     internal static string StripPathArguments(string path)
     {
         if (string.IsNullOrWhiteSpace(path))
-            throw new ArgumentNullException(nameof(path));
+            // throw new ArgumentNullException(nameof(path));
+            return null;
         if (File.Exists(path))
             return path;
         var sanitizedString = path.Replace("\"", string.Empty);
