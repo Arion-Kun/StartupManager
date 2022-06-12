@@ -35,7 +35,8 @@ public class CleanupEntry
     {
         Type,
         Relationship,
-        Abandonment
+        Abandonment,
+        Null
     }
     public override string ToString() => RegistryObject.Key;
 

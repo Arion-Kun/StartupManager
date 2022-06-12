@@ -266,6 +266,7 @@ public partial class StartupForm : Form
 
     private DataGridViewRow CreateIterationRow(RegistryKey key, string valueName)
     {
+        if (string.IsNullOrWhiteSpace(key.GetValue(valueName)?.ToString()) ) return null;
         var dgr = new DataGridViewRow();
         var name = new DataGridViewTextBoxCell();
         name.ValueType = typeof(string);

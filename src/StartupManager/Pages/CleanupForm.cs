@@ -81,6 +81,9 @@ public partial class CleanupForm : Form
             // Task.Run(()=>
             //     entryBank.AddRange(
             //         RegistryObjectRelationshipIrregularities(startupKey))),
+            Task.Run(()=>
+                entryBank.AddRange(
+                    RegistryObjectNullIrregularities(startupKey))),
             Task.Run(()=> 
                 entryBank.AddRange(
                     RegistryObjectAbandonmentIrregularities(startupApprovedKey)))
@@ -135,6 +138,22 @@ public partial class CleanupForm : Form
 
         return entries;
     }
+    
+    private static IEnumerable<CleanupEntry> RegistryObjectNullIrregularities(RegistryKey startupKey)
+    {
+        var entries = new List<CleanupEntry>();
+        foreach (var cuStartupApprovedName in startupKey.GetValueNames())
+        {
+            if (!string.IsNullOrWhiteSpace(startupKey.GetValue(cuStartupApprovedName)?.ToString()))
+                continue;
+            if (CleanupEntry.Create(startupKey, cuStartupApprovedName, CleanupEntry.ObjectIrregularityType.Null, out var startupApprovedEntry))
+                entries.Add(startupApprovedEntry);
+        }
+
+        return entries;
+    }
+    
+    
 
     private static IEnumerable<CleanupEntry> RegistryObjectTypeIrregularities(RegistryKey startupApproved)
     {
