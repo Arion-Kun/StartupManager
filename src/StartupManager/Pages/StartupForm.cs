@@ -129,13 +129,21 @@ public partial class StartupForm : Form
             case 0: // Icon
                 var path2 = StartupKeys.Rows[e.RowIndex].Cells[nameof(DataKey_Path)].Value.ToString();
                 // Open to the directory of the path
-                var dirPath = Path.GetDirectoryName(RegistryEx.RemoveArguments(path2));
+                var dirPath = PathEx.GetDirectoryName(PathEx.StripPathArguments(path2));
                 if (Directory.Exists(dirPath))
-                    Process.Start(dirPath);
+                {
+
+                    var sInfo = new ProcessStartInfo
+                    {
+                        FileName = "explorer.exe",
+                        Arguments = $"/e, /select, \"{PathEx.StripPathArguments(path2)}\""
+                    };
+                    Process.Start(sInfo);
+                }
                 break;
             case 2: // Path
                 var path = StartupKeys.Rows[e.RowIndex].Cells[nameof(DataKey_Path)].Value.ToString();
-                var pathDirectory = Path.GetDirectoryName(RegistryEx.RemoveArguments(path));
+                var pathDirectory = PathEx.GetDirectoryName(path);
                 
                 if (string.IsNullOrWhiteSpace(pathDirectory)) return;
                 var startInfo = new ProcessStartInfo
@@ -287,7 +295,7 @@ public partial class StartupForm : Form
         delete.Value = "Delete";
 
         var image = new DataGridViewImageCell();
-        var iconValue = RegistryEx.GetIcon(key.GetValue(valueName));
+        var iconValue = PathEx.GetIcon(key.GetValue(valueName));
         if (iconValue != null)
         {
             var imageVal = new Bitmap(iconValue.ToBitmap(), 20, 20);
