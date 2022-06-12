@@ -40,8 +40,10 @@ public partial class AboutForm : Form
         var latestBuildDate = await _UpdateOperation.GetBuildDateToShortDateString(GithubUpdateOperation.Versioning.Latest);
 
         await TaskAwaiter.Yield; // The rest is done in the UI thread
+        // Development builds don't display any build date as the current version would be non-existent on github
         if (!string.IsNullOrWhiteSpace(currentBuildDate))
         {
+            
             __CurrentBuildDate.Text = $"Build Date: {currentBuildDate}";
             __CurrentBuildDate.Visible = true;
         }
