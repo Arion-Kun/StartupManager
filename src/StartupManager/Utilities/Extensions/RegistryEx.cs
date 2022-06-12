@@ -34,24 +34,8 @@ internal static class RegistryEx
     internal static RegistryKey StartupApprovedLM32 => _StartupApprovedLM32 ??=
         RegistryHelpers.GetRegistryKey(@"Software\Microsoft\Windows\CurrentVersion\Explorer\StartupApproved\Run32",
             true);
-
-    private static readonly Regex PathfinderRegex = new("\"(.+)\"|(.*?\\..*?) ");
-
-    internal static string RemoveArguments(string path)
-    {
-        var regexMatch = PathfinderRegex.Match(path);
-        var match = regexMatch.Groups.Cast<Group>().FirstOrDefault(regexMatchGroup => regexMatchGroup is not Match && !string.IsNullOrWhiteSpace(regexMatchGroup.Value));
-        return match?.Value;
-    }
-    internal static Icon GetIcon(object valuePath)
-    {
-        if (valuePath == null) return null;
-        var path = valuePath.ToString();
-
-        var fileName = RemoveArguments(path);
-        return !File.Exists(fileName) ? null : Icon.ExtractAssociatedIcon(fileName);
-    }
     
+
     // The bool for a StartupKey being true is the first byte either being a 2 or a 6 in the first index, the trailing bytes could be a timestamp for when it was disabled.
     internal static readonly byte[] StartupApprovedEnabled0 = { 2, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0 };
     internal static readonly byte[] StartupApprovedEnabled1 = { 6, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,0 ,0 };

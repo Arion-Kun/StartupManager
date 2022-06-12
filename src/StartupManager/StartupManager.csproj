@@ -138,6 +138,7 @@
     <Compile Include="Utilities\Extensions\ApplicationEx.cs" />
     <Compile Include="Utilities\Extensions\EnumEx.cs" />
     <Compile Include="Utilities\Extensions\Logging.cs" />
+    <Compile Include="Utilities\Extensions\PathEx.cs" />
     <Compile Include="Utilities\Extensions\RegistryEx.cs" />
     <Compile Include="Utilities\Extensions\SettingsEx.cs" />
     <Compile Include="Utilities\Extensions\TaskSchedulerEx.cs" />
