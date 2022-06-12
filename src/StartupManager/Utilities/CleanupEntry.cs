@@ -11,7 +11,7 @@ public class CleanupEntry
 {
     private CleanupEntry() {}
 
-    internal static bool Create(RegistryKey key, string entryName, out CleanupEntry entry)
+    internal static bool Create(RegistryKey key, string entryName, ObjectIrregularityType type, out CleanupEntry entry)
     {
         entry = null;
         if (key == null || string.IsNullOrEmpty(entryName))
@@ -22,12 +22,21 @@ public class CleanupEntry
 
         entry = new CleanupEntry
         {
-            RegistryObject = new(entryName, key)
+            RegistryObject = new(entryName, key),
+            IrregularityType = type
         };
         return true;
     }
     
     private KeyValuePair<string, RegistryKey> RegistryObject;
+    internal ObjectIrregularityType IrregularityType { get; private set; }
+
+    internal enum ObjectIrregularityType
+    {
+        Type,
+        Relationship,
+        Abandonment
+    }
     public override string ToString() => RegistryObject.Key;
 
     internal bool Remove()
@@ -39,7 +48,7 @@ public class CleanupEntry
         }
         catch (Exception e)
         {
-            Trace.WriteLine(e.ToJson(), "Remove Errors");
+            Trace.TraceError(e.ToJson(), "Remove Errors");
             return false;
         }
     }

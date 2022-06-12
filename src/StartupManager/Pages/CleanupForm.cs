@@ -77,9 +77,10 @@ public partial class CleanupForm : Form
             Task.Run(()=> 
                 entryBank.AddRange(
                     RegistryObjectTypeIrregularities(startupApprovedKey))),
-            Task.Run(()=> 
-                entryBank.AddRange(
-                    RegistryObjectRelationshipIrregularities(startupKey))),
+            // Relationship can be put on halt for now, there are some LocalMachine entries that get caught.
+            // Task.Run(()=>
+            //     entryBank.AddRange(
+            //         RegistryObjectRelationshipIrregularities(startupKey))),
             Task.Run(()=> 
                 entryBank.AddRange(
                     RegistryObjectAbandonmentIrregularities(startupApprovedKey)))
@@ -94,7 +95,7 @@ public partial class CleanupForm : Form
         foreach (var approvedKeyName in approvedKeyNames)
         {
             if (StartupContainsAnyExclusionary(approvedKeyName)) continue;
-            if (CleanupEntry.Create(approvedKey, approvedKeyName, out var startupApprovedEntry0))
+            if (CleanupEntry.Create(approvedKey, approvedKeyName, CleanupEntry.ObjectIrregularityType.Abandonment, out var startupApprovedEntry0))
                 entries.Add(startupApprovedEntry0);
         }
         
@@ -120,13 +121,13 @@ public partial class CleanupForm : Form
         {
             if (startupKey.GetValueKind(startupName) != RegistryValueKind.String)
             {
-                if (CleanupEntry.Create(startupKey, startupName, out var startupApprovedEntry0))
+                if (CleanupEntry.Create(startupKey, startupName, CleanupEntry.ObjectIrregularityType.Relationship, out var startupApprovedEntry0))
                     entries.Add(startupApprovedEntry0);
                 continue;
             }
             
-            var dirPath = Path.GetDirectoryName(RegistryEx.RemoveArguments(startupKey.GetValue(startupName).ToString()));
-            if (!Directory.Exists(dirPath) && CleanupEntry.Create(startupKey, startupName, out var startupApprovedEntry1))
+            var dirPath = Path.GetDirectoryName(PathEx.LegacyStripArguments(startupKey.GetValue(startupName).ToString()));
+            if (!Directory.Exists(dirPath) && CleanupEntry.Create(startupKey, startupName, CleanupEntry.ObjectIrregularityType.Relationship, out var startupApprovedEntry1))
                 entries.Add(startupApprovedEntry1);
             
             
@@ -142,7 +143,7 @@ public partial class CleanupForm : Form
         {
             if (startupApproved.GetValueKind(cuStartupApprovedName) == RegistryValueKind.Binary)
                 continue;
-            if (CleanupEntry.Create(startupApproved, cuStartupApprovedName, out var startupApprovedEntry))
+            if (CleanupEntry.Create(startupApproved, cuStartupApprovedName, CleanupEntry.ObjectIrregularityType.Type, out var startupApprovedEntry))
                 entries.Add(startupApprovedEntry);
         }
 
@@ -202,8 +203,11 @@ public partial class CleanupForm : Form
             _ = Task.Run(async () =>
             {
                 await CleanupTask;
-                foreach (var cleanupEntry in ItemsUpForDisposal) 
-                    cleanupEntry.Remove();
+                var items = __EntryList.Items.Cast<string>().ToArray();
+                foreach (var item in items) 
+                    __EntryList.Items.Remove(item);
+                _ = Task.Run(()=> TryRemoveItems(items));
+                DialogResult = DialogResult.OK;
             });
         }
     }
