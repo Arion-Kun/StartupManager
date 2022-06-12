@@ -49,7 +49,6 @@ partial class CleanupForm
         // __DeleteAllButton
         // 
         this.@__DeleteAllButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(139)))), ((int)(((byte)(184)))));
-        this.@__DeleteAllButton.DialogResult = System.Windows.Forms.DialogResult.OK;
         this.@__DeleteAllButton.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(2)))), ((int)(((byte)(114)))), ((int)(((byte)(193)))));
         this.@__DeleteAllButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
         this.@__DeleteAllButton.ForeColor = System.Drawing.Color.White;
